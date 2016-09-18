@@ -9,7 +9,7 @@ import Text.Parsec.Char
 
 -- Haskell representation of lambda expression
 -- In Lambda Lexp Lexp, the first Lexp should always be Atom String
-data Lexp = Atom String | Lambda Lexp Lexp | Apply Lexp  Lexp 
+data Lexp = Atom String | Lambda Lexp Lexp | Apply Lexp Lexp 
 
 -- Make it possible to determine if two lambda expressions are structurally equal
 instance Eq Lexp  where
@@ -28,21 +28,20 @@ instance Show Lexp  where
 -- Reserved keywords in Oz
 -- P. 841 Table C.8, "Concepts, Techniques, and Models of Computer Programming", 
 -- Van Roy, Haridi
-ozKeywords = ["andthen","at","attr","break"
-              ,"case","catch","choice","class"
-              ,"collect","cond","continue"
-              ,"declare","default","define"
-              ,"dis","div","do","else"
-              ,"elsecase","elseif","elseof"
-              ,"end","export","fail","false"
-              ,"feat","finally","for","from"
-              ,"fun","functor","if","import"
-              ,"in","lazy","local","lock"
-              ,"meth","mod","not","of","or"
-              ,"orelse","prepare","proc"
-              ,"prop","raise","require"
-              ,"return","self","skip","then"
-              ,"thread","true","try","unit"
+ozKeywords=["andthen" , "at"     , "attr"     , "break"   ,
+            "case"    , "catch"  , "choice"   , "class"   ,
+            "collect" , "cond"   , "continue" , "declare" ,
+            "default" , "define" , "dis"      , "div"     ,
+            "do"      , "else"   , "elsecase" , "elseif"  ,
+            "elseof"  , "end"    , "export"   , "fail"    ,
+            "false"   , "feat"   , "finally"  , "for"     ,
+            "from"    , "fun"    , "functor"  , "if"      ,
+            "import"  , "in"     , "lazy"     , "local"   ,
+            "lock"    , "meth"   , "mod"      , "not"     ,
+            "of"      , "or"     , "orelse"   , "prepare" ,
+            "proc"    , "prop"   , "raise"    , "require" ,
+            "return"  , "self"   , "skip"     , "then"    ,
+            "thread"  , "true"   , "try"      , "unit"
               ] 
 
 -- Sparse language definition to define a proper Oz identifier
