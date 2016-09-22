@@ -110,8 +110,8 @@ parseLEList (x:xs) = let xs' = parseLEList xs
 outputPrinter :: Int -> [(Lexp,Lexp)] -> IO()
 outputPrinter _ [] = return ()
 outputPrinter n ((lexp,lexp'):lexps) = do
-    putStrLn ("Input " ++ (show n) ++ ": " ++ (show lexp))
-    putStrLn ("Result " ++ (show n) ++ ": " ++ (show lexp'))
+    putStrLn ("Input  " ++ show n ++ ": " ++ show lexp)
+    putStrLn ("Result " ++ show n ++ ": " ++ show lexp')
     outputPrinter (n+1) lexps
 
 -- Given a filename and function for reducing lambda expressions,
