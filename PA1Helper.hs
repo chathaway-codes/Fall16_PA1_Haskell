@@ -9,7 +9,7 @@ import Text.Parsec.Char
 
 -- Haskell representation of lambda expression
 -- In Lambda Lexp Lexp, the first Lexp should always be Atom String
-data Lexp = Atom String | Lambda Lexp Lexp | Apply Lexp  Lexp 
+data Lexp = Atom String | Lambda Lexp Lexp | Apply Lexp Lexp
 
 -- Make it possible to determine if two lambda expressions are structurally equal
 instance Eq Lexp  where
@@ -21,29 +21,27 @@ instance Eq Lexp  where
 -- Allow for Lexp datatype to be printed like the Oz representation of a lambda expression
 instance Show Lexp  where 
     show (Atom v) = v
-    show (Lambda exp1 exp2) = "\\" ++ (show exp1) ++ "." ++ (show exp2) 
-    show (Apply exp1 exp2) = "(" ++ (show exp1) ++ " " ++ (show exp2) ++ ")" 
+    show (Lambda exp1 exp2) = "\\" ++ show exp1 ++ "." ++ show exp2 
+    show (Apply exp1 exp2) = "(" ++ show exp1 ++ " " ++ show exp2 ++ ")" 
 
 
 -- Reserved keywords in Oz
 -- P. 841 Table C.8, "Concepts, Techniques, and Models of Computer Programming", 
 -- Van Roy, Haridi
-ozKeywords = ["andthen","at","attr","break"
-              ,"case","catch","choice","class"
-              ,"collect","cond","continue"
-              ,"declare","default","define"
-              ,"dis","div","do","else"
-              ,"elsecase","elseif","elseof"
-              ,"end","export","fail","false"
-              ,"feat","finally","for","from"
-              ,"fun","functor","if","import"
-              ,"in","lazy","local","lock"
-              ,"meth","mod","not","of","or"
-              ,"orelse","prepare","proc"
-              ,"prop","raise","require"
-              ,"return","self","skip","then"
-              ,"thread","true","try","unit"
-              ] 
+ozKeywords=["andthen" , "at"     , "attr"     , "break"   ,
+            "case"    , "catch"  , "choice"   , "class"   ,
+            "collect" , "cond"   , "continue" , "declare" ,
+            "default" , "define" , "dis"      , "div"     ,
+            "do"      , "else"   , "elsecase" , "elseif"  ,
+            "elseof"  , "end"    , "export"   , "fail"    ,
+            "false"   , "feat"   , "finally"  , "for"     ,
+            "from"    , "fun"    , "functor"  , "if"      ,
+            "import"  , "in"     , "lazy"     , "local"   ,
+            "lock"    , "meth"   , "mod"      , "not"     ,
+            "of"      , "or"     , "orelse"   , "prepare" ,
+            "proc"    , "prop"   , "raise"    , "require" ,
+            "return"  , "self"   , "skip"     , "then"    ,
+            "thread"  , "true"   , "try"      , "unit"    ]
 
 -- Sparse language definition to define a proper Oz identifier
 -- An atom is defined as follows:
@@ -78,8 +76,7 @@ lambargs = do
 
 lamb = do
   char '\\'
-  p <- lambargs
-  return p
+  lambargs
 
 appargs = do
     var1 <- start
@@ -87,24 +84,22 @@ appargs = do
     var2 <- start
     return (Apply var1 var2)
 
-app = do
-  p <- m_parens appargs 
-  return p
+app = m_parens appargs 
 
 start = atom <|> lamb <|> app
 
 -- Use previously defined parser to parse a given String
 parseLExpr :: String -> Either ParseError Lexp 
-parseLExpr input = parse start "" input
+parseLExpr = parse start ""
 
 -- Given a list of Strings, return a list containing only Lexp objects
 -- for strings that are valid lambda expressions
 parseLEList :: [String]->[Lexp]
 parseLEList [] = []
 parseLEList (x:xs) = let xs' = parseLEList xs 
-                              in case (parseLExpr x) of
+                              in case parseLExpr x of
                                    Left err -> xs' 
-                                   Right x' -> (x':xs') 
+                                   Right x' -> x':xs' 
 
 -- Pretty printer for outputting inputted lambda expressions along with
 -- their reduced expressions. Integer used to distiguish between test cases.
